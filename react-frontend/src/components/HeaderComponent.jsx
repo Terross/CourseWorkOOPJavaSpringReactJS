@@ -9,7 +9,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import GitHubIcon from '@material-ui/icons/GitHub';
+
 
 const StyledMenu = withStyles({
     paper: {
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const preventDefault = (event) => event.preventDefault();
     let history = useHistory();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,14 +59,14 @@ export default function ButtonAppBar(props) {
   };
 
   const goToCatalog = () => {
-   
+   history.push('/catalog')
   };
 
   const goToOrders = () => {
       
   };
   const goToProducts = () => {
-
+    history.push('/products');
   };
   const goToEmployee = () => {
     history.push('/employees');
@@ -91,8 +94,7 @@ export default function ButtonAppBar(props) {
           <Typography variant="h6" className={classes.title}>
             {props.title}
           </Typography>
-
-          <Button color="inherit">Login</Button>
+          
         </Toolbar>
       </AppBar>
       <StyledMenu
