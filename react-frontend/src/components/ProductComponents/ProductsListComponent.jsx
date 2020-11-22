@@ -44,7 +44,7 @@ export default function ProductsListComponent() {
   const getProducts=()=>{
       axios.get(PRODUCTS_API_BASE_URL).then(data=>{
           setProductsState(data.data);
-          console.log(stateProducts)
+          
       })
       
   }

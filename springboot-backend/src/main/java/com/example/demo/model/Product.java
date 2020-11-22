@@ -13,7 +13,8 @@ public class Product {
     @Basic(optional = false)
     private String name;
 
-    private Double price;
+    @Column(name = "price")
+    private Double price = 0.0;
 
     public Product(Long id, String name, Double price) {
         this.id = id;

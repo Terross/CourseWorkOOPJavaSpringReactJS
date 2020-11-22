@@ -19,56 +19,66 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   }));
+  
 function EditCustomer(props) {
     const history = useHistory();
     const classes = useStyles();
     const [firstName, setFirstName] = useState('');
     const [secondName, setSecondName] = useState('');
-    const [adress, setAdress] = useState('');
+	const [adress, setAdress] = useState('');
+	const [firstNameValidation,setFirstNameValidation] = useState(false);
+    const [secondNameValidation,setSecondNameValidation] = useState(false);
+	const [adressValidation,setAdressValidation] = useState(false);
+	
     const cancelClick = () => {
         history.push("/Customers");
-    }
+	}
+	
     const getCustomerById=(id)=>{
         axios.get(CUSTOMER_API_BASE_URL+'/'+id).then(data=>{
-            let Customer = data.data;
-            
-           setFirstName(Customer.firstName);
-           setSecondName(Customer.secondName);
-           setAdress(Customer.salary);
+        	let Customer = data.data;
+			setFirstName(Customer.firstName);
+			setSecondName(Customer.secondName);
+			setAdress(Customer.salary);
         })
         
-    }
+	}
+	
     React.useEffect(() => {
         let id = props.match.params.id;
         getCustomerById(id);
-      }, []);
+	  }, []);
+	  
     const acceptClick=()=>{
+		setFirstNameValidation(false);
+        setSecondNameValidation(false);
+        setAdressValidation(false);
         const Customer = {
             firstName: firstName,
             secondName: secondName,
             adress: adress
         }
         const id = props.match.params.id;
-        axios.put(CUSTOMER_API_BASE_URL + '/' + id, Customer);
-        
-        history.push("/Customers");
-        
+        axios.put(CUSTOMER_API_BASE_URL + '/' + id, Customer).then(data =>{
+			if(data.data["message"] == "Wrong fields"){
+				if(data.data["wrongFields"].includes("adress")) {setAdressValidation(true);}
+				if(data.data["wrongFields"].includes("secondName")) {setSecondNameValidation(true);}
+				if(data.data["wrongFields"].includes("firstName")) {setFirstNameValidation(true);}
+			}
+			if(data.data["message"] == "Success") {
+				history.push("/Customers");
+			}	
+        });
     }
 
   
     const id = props.match.params.id;
-    console.log(id);
     let emp ;
     props.location.state.stateCustomers.forEach(element => {
-      
       if(element.id==id) {
-        console.log("element: "+ element.id);
-        console.log("id :" + id);
         emp = element;
-  
       }
     });
-   console.log(props.location.state.stateCustomer);
    
     return (
         <Container maxWidth={2440}>
@@ -79,19 +89,33 @@ function EditCustomer(props) {
             <form className={classes.root} noValidate autoComplete="off" >
             <div style={{marginTop:"20px"}}>
             <TextField id="standard-basic" label="First name"
-             defaultValue={emp.firstName}
-             
-             onChange={e => setFirstName(e.target.value)}/>
+				defaultValue={emp.firstName}
+				error={firstNameValidation}
+				onChange={e => {
+					setFirstName(e.target.value);
+					setFirstNameValidation(false);
+				}}
+			/>
             </div>
             <div>
             <TextField id="standard-basic" label="Second name" 
-            defaultValue={emp.secondName}
-            onChange={e => setSecondName(e.target.value)}/>
+				defaultValue={emp.secondName}
+				error={secondNameValidation}
+				onChange={e => {
+					setSecondName(e.target.value);
+					setSecondNameValidation(false);
+				}}
+			/>
             </div>
             <div>
             <TextField id="standard-basic" label="Adress" 
-            defaultValue={emp.adress}
-            onChange={e => setAdress(e.target.value)}/>
+				defaultValue={emp.adress}
+				error={adressValidation}
+				onChange={e => {
+					setAdress(e.target.value);
+					setAdressValidation(false);
+				}}
+			/>
             <Button variant="contained" color="primary" style={{marginLeft:"10px",
             marginTop:"10px"}}
             onClick={acceptClick}

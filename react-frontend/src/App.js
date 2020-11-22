@@ -13,6 +13,9 @@ import CustomerListComponent from './components/CustomerComponents/CustomerListC
 import ProductsListComponent from './components/ProductComponents/ProductsListComponent';
 import ProductsList from './components/Catalog/ProductsList';
 
+
+import OrdersListComponent from './components/OrderComponents/OrdersListComponent';
+
 function App() {
   return (
     <div>
@@ -21,7 +24,7 @@ function App() {
            
           <div className="container">
             <Switch>
-              <Route path="/" exact component = {MainPageComponent}/>
+              <Route path="/" exact component = {ProductsList}/>
               <Route path="/main-page" component = {MainPageComponent}/>
               <Route path="/employees" component = {EmployeesListComponent}/>
               <Route path="/edit-employee/:id" component = {EditEmployee}/>
@@ -29,6 +32,7 @@ function App() {
               <Route path="/edit-customer/:id" component = {EditCustomer}/>
               <Route path="/catalog" component={ProductsList}/>
               <Route path="/products" component={ProductsListComponent}/>
+			  <Route path="/orders" component={OrdersListComponent}/>
             </Switch>
           </div>
 

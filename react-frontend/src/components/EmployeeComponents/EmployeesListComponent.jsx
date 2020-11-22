@@ -72,6 +72,7 @@ export default function EmployeeListComponent() {
       state:{stateEmployee}
       }
     )
+    setEmployeeState([...stateEmployee]);
     getEmployee();
     
   }

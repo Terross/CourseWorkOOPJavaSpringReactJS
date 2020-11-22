@@ -20,11 +20,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Container } from '@material-ui/core';
 const columns = [
-  { id: 'firstName', label: 'First Name', minWidth: 170 },
-  { id: 'secondName', label: 'Second Name', minWidth: 100 },
-  { id: 'adress', label: 'Adress',minWidth: 170},
-  
-  
+	{ id: 'firstName', label: 'First Name', minWidth: 170 },
+	{ id: 'secondName', label: 'Second Name', minWidth: 100 },
+	{ id: 'adress', label: 'Adress',minWidth: 170}, 
 ];
 const CUSTOMER_API_BASE_URL = "http://localhost:8080/api/v1/customer";
 
@@ -72,6 +70,7 @@ export default function CustomerListComponent() {
       state:{stateCustomers}
       }
     )
+    setCustomersState([...stateCustomers]);
     getCustomers();
     
   }

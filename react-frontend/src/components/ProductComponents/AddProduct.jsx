@@ -19,16 +19,25 @@ function AddProduct(props) {
     const classes = useStyles();
     const [nameState, setNameState] = useState('');
     const [priceState, setPriceState] = useState('');
-    
+	const [nameStateValidation, setNameStateValidation] = useState(false);
+	const [priceStateValidation, setPriceStateValidation] = useState(false);
     
     const acceptClick=()=>{
+		setNameStateValidation(false);
+		setPriceStateValidation(false);
+
         const product = {
             name: nameState,
             price: priceState
         }
         
         axios.post(PRODUCT_API_BASE_URL, product).then(data =>{
-          props.getProducts();
+			console.log(data.data);
+			if(data.data["message"] == "Wrong fields"){
+				if(data.data["wrongFields"].includes("name")) {setNameStateValidation(true);}
+				if(data.data["wrongFields"].includes("price")) {setPriceStateValidation(true);}
+			}
+          	props.getProducts();
         })
         
     }
@@ -38,12 +47,22 @@ function AddProduct(props) {
             <h2>Add product</h2>
             <form className={classes.root} noValidate autoComplete="off" >
             <div>
-            <TextField id="standard-basic" label="Name"
-             onChange={e => setNameState(e.target.value)}/>
+			<TextField id="standard-basic"
+						label="Name"
+						error={nameStateValidation}
+             			onChange={e => {
+							setNameState(e.target.value);
+							setNameStateValidation(false);
+						}}/>
             </div>
             <div>
-            <TextField id="standard-basic" label="Price" 
-            onChange={e => setPriceState(e.target.value)}/>
+			<TextField id="standard-basic" 
+					   label="Price"
+					   error={priceStateValidation}
+            		   onChange={e => {
+						   setPriceState(e.target.value);
+						   setPriceStateValidation(false);
+						}}/>
             </div>
             <Button variant="contained" color="primary" style={{marginLeft:"10px"}}
             onClick={acceptClick}

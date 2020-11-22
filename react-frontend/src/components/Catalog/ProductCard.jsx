@@ -1,16 +1,39 @@
-import {Button, Container, Paper} from '@material-ui/core';
+import {Button, Card, Container, Paper} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-const useStyles = makeStyles((theme) => ({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      '& > *': {
-        margin: theme.spacing(1),
-        width: theme.spacing(24),
-        height: theme.spacing(24),
-      },
-    },
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
+import box from './box.png';
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//       display: 'flex',
+//       flexWrap: 'wrap',
+//       '& > *': {
+//         margin: theme.spacing(1),
+//         width: theme.spacing(24),
+//         height: theme.spacing(24),
+//       },
+//     },
+//   }));
+  const useStyles = makeStyles((theme) => ({
+	root: {
+	  maxWidth: 200,
+	  minWidth:100,
+	  display: 'flex',
+	  flexWrap: 'wrap',
+	  height:320,
+	  '& > *': {
+		margin: theme.spacing(1),
+		width: theme.spacing(24),
+		height: theme.spacing(24),
+	  },
+	},
+	media: {
+		height:150,
+	},
+	
   }));
 export default function ProductCard(props) {
     const classes = useStyles();
@@ -25,16 +48,25 @@ export default function ProductCard(props) {
     }
     return(
         <div className={classes.root}>
-            <Paper elevation={3}>
-            <Container align="center" style={{height: "50px"}}>
-            <h2>{props.product.name}</h2>
-            </Container>
-            <Container align="center">
-            <h3 >{props.product.price + "$"}</h3>
-            </Container>
-            <Container >
-              
-                <Button variant="contained" color="primary" style={{width:"45%",
+			
+            <Paper elevation={4}>
+			<Card className={classes.root}>
+			<CardMedia
+				className={classes.media}
+				image={box}
+				
+			/>
+			<CardContent>
+				<Typography variant="h5" align="center">
+				{props.product.name}
+				</Typography>
+				<Typography variant="h6" align="center">
+				{props.product.price + "$"}
+				</Typography>
+			</CardContent>
+		
+			<CardActions style={{marginTop:"-230px"}}>
+				<Button variant="contained" color="primary" style={{width:"45%",
                                                                     margin:"3px",
                                                                     verticalAlign:"bottom"}}
                                                                     onClick={() =>addToCart(props.product)}>
@@ -47,10 +79,8 @@ export default function ProductCard(props) {
                                                                     onClick={() => removeToCart(props.product)}>
                   Remove
                 </Button>
-              
-              
-            </Container>
-            
+			</CardActions>
+			</Card>
             </Paper>
         </div>
         

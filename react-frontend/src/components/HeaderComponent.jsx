@@ -59,11 +59,11 @@ export default function ButtonAppBar(props) {
   };
 
   const goToCatalog = () => {
-   history.push('/catalog')
+   history.push('/catalog');
   };
 
   const goToOrders = () => {
-      
+      history.push("/orders");
   };
   const goToProducts = () => {
     history.push('/products');

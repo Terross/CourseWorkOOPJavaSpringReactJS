@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.sun.istack.NotNull;
+
 @Entity
 @Table(name = "customer")
 @AttributeOverrides({
@@ -22,6 +24,7 @@ public class Customer extends Person{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@NotNull
 	@Column(name = "adress")
 	private String adress;
 
