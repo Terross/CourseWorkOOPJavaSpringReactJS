@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.example.demo.report.ProductReportService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Exceptions.ElementNotFound;
 import com.example.demo.Exceptions.ValidationException;
-import com.example.demo.model.Customer;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 
@@ -62,6 +63,9 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private ProductReportService reportService;
 	
 	@GetMapping("/employee")
 	public List<Employee> getAllCustomers(){
@@ -117,6 +121,5 @@ public class EmployeeController {
 		responseMap.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(responseMap);
 	}
-	
 
 }

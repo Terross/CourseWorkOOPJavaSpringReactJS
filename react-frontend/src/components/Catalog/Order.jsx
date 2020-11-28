@@ -101,7 +101,6 @@ export default function Order(props) {
         </List>
         <Button variant="contained"
                     color="primary"
-                    
                     onClick={()=> addOrder()}
                     style={{marginBottom:"15px"}}>
                 Pay

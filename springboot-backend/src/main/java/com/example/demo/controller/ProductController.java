@@ -1,12 +1,15 @@
 package com.example.demo.controller;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.example.demo.report.ProductReportService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Exceptions.ElementNotFound;
 import com.example.demo.Exceptions.ValidationException;
-import com.example.demo.model.Customer;
-import com.example.demo.model.Employee;
 import com.example.demo.model.OrderProduct;
 import com.example.demo.model.Product;
 import com.example.demo.repository.OrderProductRepository;
@@ -60,6 +61,8 @@ class FieldValidator {
 		}
 	}
 
+	@Autowired
+	private ProductReportService reportService;
     @Autowired
     private ProductRepository productRepository;
     @Autowired 
@@ -100,4 +103,8 @@ class FieldValidator {
     	productRepository.save(product);
     	return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
     }
+	@GetMapping("/report/{format}")
+	public String generateReport(@PathVariable String format) throws FileNotFoundException, JRException {
+		return reportService.exportReport(format);
+	}
 }

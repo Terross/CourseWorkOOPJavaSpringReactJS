@@ -10,8 +10,11 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
+import FunctionsIcon from '@material-ui/icons/Functions';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import GitHubIcon from '@material-ui/icons/GitHub';
-
+import SaveIcon from '@material-ui/icons/Save';
+import axios from 'axios';
 
 const StyledMenu = withStyles({
     paper: {
@@ -75,9 +78,34 @@ export default function ButtonAppBar(props) {
     history.push('/customers');
     };
     const goToOrder = () => {
-
+		
     }
-  
+  const showPdfReport = (title) => {
+	switch (title) {
+		case "Customers":
+			window.open(props.PDF, '_blank');
+			break;
+	
+		default:
+			break;
+	}
+  }
+  const savePdfReport = (title) => {
+	switch (title) {
+		case "Customers":
+			axios.get("http://localhost:8080/api/v1/customer/report");
+			break;
+	
+		default:
+			break;
+	}
+  }
+  const showGitPage = () => {
+	window.open("https://github.com/Terross/OOPJavaSpringReactJS");
+  }
+  const findPi = () => {
+	  window.open("http://localhost:3000/Pi");
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -94,7 +122,50 @@ export default function ButtonAppBar(props) {
           <Typography variant="h6" className={classes.title}>
             {props.title}
           </Typography>
-          
+		  <Button
+				variant="contained"
+				color="primary"
+				size="small"
+				className={classes.button}
+				startIcon={<SaveIcon/>}
+				onClick={() => savePdfReport(props.title)}
+				disableElevation
+			>
+				Save Pdf
+			</Button>
+			<Button
+				variant="contained"
+				color="primary"
+				size="small"
+				className={classes.button}
+				startIcon={<PictureAsPdfIcon />}
+				onClick={() => showPdfReport(props.title)}
+				disableElevation
+			>
+				Show Pdf
+			</Button>
+			<Button
+				variant="contained"
+				color="primary"
+				size="small"
+				className={classes.button}
+				startIcon={<FunctionsIcon/>}
+				onClick={() => findPi()}
+				disableElevation
+			>
+				Find Pi
+			</Button>
+			<Button
+				variant="contained"
+				color="primary"
+				size="small"
+				className={classes.button}
+				startIcon={<GitHubIcon/>}
+				onClick={() => showGitPage()}
+				disableElevation
+			>
+				GitHub page
+			</Button>
         </Toolbar>
       </AppBar>
       <StyledMenu
