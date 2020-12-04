@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import {Grid } from '@material-ui/core';
-
+import PDF from '../../PdfReports/orders.pdf'
 import { useHistory } from 'react-router-dom';
 import HeaderComponent from '../HeaderComponent';
 import IconButton from '@material-ui/core/IconButton';
@@ -71,7 +71,7 @@ export default function OrdersListComponent() {
   
   return (
     <Container fixed={false} maxWidth={2440}>
-      <HeaderComponent title={"Orders"}></HeaderComponent>
+      <HeaderComponent title={"Orders"} PDF={PDF}></HeaderComponent>
       <Paper className={classes.root}>
         <TableContainer className={classes.container} >
       

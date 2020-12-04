@@ -20,7 +20,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Container } from '@material-ui/core';
 import PDF from '../../PdfReports/customers.pdf'
-
 const columns = [
 	{ id: 'firstName', label: 'First Name', minWidth: 170 },
 	{ id: 'secondName', label: 'Second Name', minWidth: 100 },

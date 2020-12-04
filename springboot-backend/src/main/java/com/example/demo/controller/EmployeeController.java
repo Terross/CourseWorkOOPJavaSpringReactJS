@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.example.demo.report.ProductReportService;
+import com.example.demo.service.CustomerService;
+import com.example.demo.service.EmployeeService;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,92 +36,40 @@ import com.example.demo.repository.EmployeeRepository;
 @RestController
 @RequestMapping("/api/v1")
 public class EmployeeController {
-	
-	class FieldValidator {
-		
-		private ArrayList<String> wrongFields;
-		public FieldValidator(Employee employee) {
-			ArrayList<String> wrongFields = new ArrayList<String>();
-			if(employee.getSalary()<=0) {
-				wrongFields.add("salary");
-			}
-			if(employee.getFirstName()==null || employee.getFirstName().isEmpty()) {
-				wrongFields.add("firstName");
-			}
-			if(employee.getSecondName()==null || employee.getSecondName().isEmpty()) {
-				wrongFields.add("secondName");
-			}
-			this.wrongFields = wrongFields;
-		}
-		
-		public void setWrongFields(ArrayList<String> wrongFields) {
-			this.wrongFields = wrongFields;
-		}
-		
-		public ArrayList<String> getWrongFields() {
-			return wrongFields;
-		}
-	}
-	
-	@Autowired
-	private EmployeeRepository employeeRepository;
 
 	@Autowired
-	private ProductReportService reportService;
+	private EmployeeService employeeService;
 	
 	@GetMapping("/employee")
-	public List<Employee> getAllCustomers(){
-		return employeeRepository.findAll();
+	public List<Employee> getAllEmployees(){
+		return employeeService.getAllEmployees();
 	}
 	
 	@PostMapping("/employee")
-	public ResponseEntity<Object> addEmployee(@RequestBody Employee employee) throws ValidationException {
-		FieldValidator fieldValidator = new FieldValidator(employee);
-		if(!fieldValidator.getWrongFields().isEmpty()) {
-			throw new ValidationException("Wrong fields", fieldValidator.getWrongFields());
-		}
-		employeeRepository.save(employee);
-		return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
+	public ResponseEntity<Object> addEmployee(@RequestBody Employee employee)  {
+		boolean status = employeeService.addEmployee(employee);
+		return new ResponseEntity<Object>(new Status(status), HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/employee/{id}")
-	public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id) throws ElementNotFound {
-		Optional<Employee> employeeOptional = employeeRepository.findById(id);
-		if(employeeOptional.isEmpty()) {
-			throw new ElementNotFound("Employee with " + id+ " id doesn't exist!");
-		}
-		Employee employee = employeeOptional.get();		
-		return ResponseEntity.ok(employee);
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id){
+		return ResponseEntity.ok(employeeService.getEmployeeById(id));
 	}
+
 	@PutMapping("/employee/{id}")
-	public ResponseEntity<Object> updateEmployee(@PathVariable Integer id,@RequestBody Employee employeeDetail){
-		Optional<Employee> employeeOptional = employeeRepository.findById(id);
-		if(employeeOptional.isEmpty()) {
-			throw new ElementNotFound("Employee with " + id+ " id doesn't exist!");
-		}
-		FieldValidator fieldValidator = new FieldValidator(employeeDetail);
-		if(!fieldValidator.getWrongFields().isEmpty()) {
-			throw new ValidationException("Wrong fields", fieldValidator.getWrongFields());
-		}
-		Employee employee = employeeOptional.get();	
-		employee.setSalary(employeeDetail.getSalary());
-		employee.setFirstName(employeeDetail.getFirstName());
-		employee.setSecondName(employeeDetail.getSecondName());
-		employeeRepository.save(employee);
-		return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
+	public ResponseEntity<Object> updateEmployee(@PathVariable Integer id,@RequestBody Employee employee){
+		boolean status = employeeService.updateEmployee(id, employee);
+		return new ResponseEntity<Object>(new Status(status), HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/employee/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteEmployee(@PathVariable Integer id) throws ElementNotFound{
-		Optional<Employee> employeeOptional = employeeRepository.findById(id);
-		if(employeeOptional.isEmpty()) {
-			throw new ElementNotFound("Employee with " + id+ " id doesn't exist!");
-		}
-		Employee employee = employeeOptional.get();	
-		employeeRepository.delete(employee);
-		Map<String, Boolean> responseMap = new HashMap<>();
-		responseMap.put("deleted", Boolean.TRUE);
-		return ResponseEntity.ok(responseMap);
+	public ResponseEntity<Object> deleteEmployee(@PathVariable Integer id) throws ElementNotFound{
+		boolean status = employeeService.deleteEmployeeById(id);
+		return new ResponseEntity<Object>(new Status(status), HttpStatus.ACCEPTED);
 	}
-
+	@GetMapping("/employee/report")
+	public ResponseEntity<Object> createPdfReport() throws FileNotFoundException, JRException {
+		boolean status = employeeService.createReports();
+		return new ResponseEntity<Object>(new Status(status),HttpStatus.ACCEPTED);
+	}
 }

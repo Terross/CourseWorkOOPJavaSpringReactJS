@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import {Grid } from '@material-ui/core';
-
+import PDF from '../../PdfReports/products.pdf'
 import { useHistory } from 'react-router-dom';
 import AddProducts from './AddProduct';
 import HeaderComponent from '../HeaderComponent';
@@ -83,7 +83,7 @@ export default function ProductsListComponent() {
   
   return (
     <Container fixed={false} maxWidth={2440}>
-      <HeaderComponent title={"Products"}></HeaderComponent>
+      <HeaderComponent title={"Products"} PDF={PDF}></HeaderComponent>
       <Paper className={classes.root}>
       
       <Grid container algin="center" alignItems="center" direction="row" spacing={16}>

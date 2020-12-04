@@ -7,9 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import com.example.demo.report.ProductReportService;
+import com.example.demo.service.EmployeeService;
 import net.sf.jasperreports.engine.JRException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.Exceptions.ElementNotFound;
 import com.example.demo.Exceptions.ValidationException;
 import com.example.demo.model.OrderProduct;
@@ -30,14 +33,12 @@ import com.example.demo.repository.OrderProductRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
 
-
-
-
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class ProductController {
-class FieldValidator {
+
+	class FieldValidator {
 		
 		private ArrayList<String> wrongFields;
 		public FieldValidator(Product product) {
@@ -61,6 +62,7 @@ class FieldValidator {
 		}
 	}
 
+	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	@Autowired
 	private ProductReportService reportService;
     @Autowired
@@ -69,10 +71,12 @@ class FieldValidator {
     private OrderProductRepository orderProductRepository;
     @Autowired
     private OrderRepository orderRepository;
+
     @GetMapping("/products")
     public Iterable<Product> getProducts() {
         return productRepository.findAll();
     }
+
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProduct(@PathVariable Long id) throws ElementNotFound {
     	Optional<Product> optionalProduct = productRepository.findById(id);
@@ -93,6 +97,7 @@ class FieldValidator {
 		responseMap.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(responseMap);
     }
+
     @PostMapping("/products")
     public ResponseEntity<Object> addProduct(@RequestBody Product product) throws ValidationException {
     	FieldValidator fieldValidator = new FieldValidator(product);
@@ -103,8 +108,19 @@ class FieldValidator {
     	productRepository.save(product);
     	return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
     }
-	@GetMapping("/report/{format}")
-	public String generateReport(@PathVariable String format) throws FileNotFoundException, JRException {
-		return reportService.exportReport(format);
+
+	@GetMapping("/product/report")
+	public ResponseEntity<Object> generateReport() throws FileNotFoundException, JRException {
+		try {
+			CompletableFuture<Void> pdfReprot = reportService.exportPDFReport();
+			CompletableFuture<Void> htmlReport = reportService.exportHTMLReport();
+			CompletableFuture.allOf(pdfReprot, htmlReport);
+			logger.info("The reports was created");
+		} catch (FileNotFoundException | JRException e) {
+			logger.error("The report was not created");
+			e.printStackTrace();
+			return new ResponseEntity<Object>(new Status("Error"), HttpStatus.ACCEPTED);
+		}
+		return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
 	}
 }

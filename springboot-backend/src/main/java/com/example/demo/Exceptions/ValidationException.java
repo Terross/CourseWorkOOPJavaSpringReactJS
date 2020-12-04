@@ -21,7 +21,8 @@ public class ValidationException extends RuntimeException{
 		return message;
 	}
 
-	
+	public boolean returnStatus() { return false; }
+
 	public void setMessage(String message) {
 		this.message = message;
 	}

@@ -18,6 +18,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Container } from '@material-ui/core';
 import Order from './Order';
+
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'price', label: 'Price', minWidth: 100 },
@@ -59,7 +60,7 @@ export default function ProductsList(props) {
     }, [])
     return(
         <Container maxWidth={2440}>
-            <HeaderComponent title="Catalog"></HeaderComponent>
+            <HeaderComponent title="Catalog" ></HeaderComponent>
             <Grid container>
                 <Grid item  xs={9}>
                     <Grid container>

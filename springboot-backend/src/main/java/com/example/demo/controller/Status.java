@@ -8,6 +8,13 @@ public class Status {
     public Status(String message) {
         this.message = message;
     }
+    public Status(Boolean status) {
+	    if(status) {
+	        this.message = "Success";
+        } else {
+	        this.message = "Error";
+        }
+    }
     public Status(Double d) {
     	this.message = Double.toString(d);
     }

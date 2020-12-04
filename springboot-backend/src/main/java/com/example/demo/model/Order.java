@@ -30,15 +30,17 @@ public class Order {
     @JsonIgnore
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
-    
-    
     @Column(name = "price")
+    private Double price;
+
+
     public Double getTotalOrderPrice() {
         double sum = 0D;
         List<OrderProduct> orderProducts = getOrderProducts();
         for (OrderProduct op : orderProducts) {
             sum += op.getTotalPrice();
         }
+        this.price = sum;
         return sum;
     }
     
@@ -58,4 +60,11 @@ public class Order {
         this.orderProducts = orderProducts;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }

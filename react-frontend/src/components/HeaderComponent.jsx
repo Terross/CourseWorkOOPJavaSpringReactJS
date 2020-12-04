@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [status, setStatus] = React.useState(true);
   const preventDefault = (event) => event.preventDefault();
     let history = useHistory();
   const handleClick = (event) => {
@@ -85,17 +86,37 @@ export default function ButtonAppBar(props) {
 		case "Customers":
 			window.open(props.PDF, '_blank');
 			break;
-	
+		case "Employees":
+			window.open(props.PDF, '_blank');
+			break;
+		case "Products":
+			window.open(props.PDF, '_blank');
+			break;
+		case "Orders":
+			window.open(props.PDF, '_blank');
+			break;
 		default:
 			break;
 	}
   }
-  const savePdfReport = (title) => {
+  const saveReports = (title) => {
 	switch (title) {
 		case "Customers":
 			axios.get("http://localhost:8080/api/v1/customer/report");
+			setStatus(false);
 			break;
-	
+		case "Employees":
+			axios.get("http://localhost:8080/api/v1/employee/report");
+			setStatus(false);
+			break;
+		case "Products":
+			axios.get("http://localhost:8080/api/product/report");
+			setStatus(false);
+			break;
+		case "Orders":
+			axios.get("http://localhost:8080/api/order/report");
+			setStatus(false);
+			break;
 		default:
 			break;
 	}
@@ -103,6 +124,7 @@ export default function ButtonAppBar(props) {
   const showGitPage = () => {
 	window.open("https://github.com/Terross/OOPJavaSpringReactJS");
   }
+  
   const findPi = () => {
 	  window.open("http://localhost:3000/Pi");
   }
@@ -128,10 +150,10 @@ export default function ButtonAppBar(props) {
 				size="small"
 				className={classes.button}
 				startIcon={<SaveIcon/>}
-				onClick={() => savePdfReport(props.title)}
+				onClick={() => saveReports(props.title)}
 				disableElevation
 			>
-				Save Pdf
+				Save reports
 			</Button>
 			<Button
 				variant="contained"
@@ -140,7 +162,9 @@ export default function ButtonAppBar(props) {
 				className={classes.button}
 				startIcon={<PictureAsPdfIcon />}
 				onClick={() => showPdfReport(props.title)}
+				disabled = {status}
 				disableElevation
+				style={{marginLeft: "15px"}}
 			>
 				Show Pdf
 			</Button>
@@ -152,6 +176,7 @@ export default function ButtonAppBar(props) {
 				startIcon={<FunctionsIcon/>}
 				onClick={() => findPi()}
 				disableElevation
+				
 			>
 				Find Pi
 			</Button>
