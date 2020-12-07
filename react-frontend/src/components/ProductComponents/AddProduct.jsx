@@ -18,9 +18,11 @@ function AddProduct(props) {
  
     const classes = useStyles();
     const [nameState, setNameState] = useState('');
-    const [priceState, setPriceState] = useState('');
+	const [priceState, setPriceState] = useState('');
+	const [countState, setCountState] = useState('');
 	const [nameStateValidation, setNameStateValidation] = useState(false);
 	const [priceStateValidation, setPriceStateValidation] = useState(false);
+	const [countStateValidation, setCountStateValidation] = useState(false);
     
     const acceptClick=()=>{
 		setNameStateValidation(false);
@@ -28,7 +30,8 @@ function AddProduct(props) {
 
         const product = {
             name: nameState,
-            price: priceState
+			price: priceState,
+			count: countState
         }
         
         axios.post(PRODUCT_API_BASE_URL, product).then(data =>{
@@ -36,6 +39,7 @@ function AddProduct(props) {
 			if(data.data["message"] == "Wrong fields"){
 				if(data.data["wrongFields"].includes("name")) {setNameStateValidation(true);}
 				if(data.data["wrongFields"].includes("price")) {setPriceStateValidation(true);}
+				if(data.data["wrongFields"].includes("count")) {setCountStateValidation(true);}
 			}
           	props.getProducts();
         })
@@ -62,6 +66,15 @@ function AddProduct(props) {
             		   onChange={e => {
 						   setPriceState(e.target.value);
 						   setPriceStateValidation(false);
+						}}/>
+            </div>
+			<div>
+			<TextField id="standard-basic" 
+					   label="Count"
+					   error={countStateValidation}
+            		   onChange={e => {
+						   setCountState(e.target.value);
+						   setCountStateValidation(false);
 						}}/>
             </div>
             <Button variant="contained" color="primary" style={{marginLeft:"10px"}}

@@ -21,6 +21,7 @@ import { Container } from '@material-ui/core';
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'price', label: 'Price', minWidth: 100 },
+  {id : 'count', label: 'Count', minWidth:100},
 ];
 const PRODUCTS_API_BASE_URL = "http://localhost:8080/api/products";
 
@@ -62,16 +63,16 @@ export default function ProductsListComponent() {
   
   
 
-  // const editProducts = id => {
+  const editProduct = id => {
     
-  //   history.push({
-  //     pathname: `/edit-Products/${id}`,
-  //     state:{stateProducts}
-  //     }
-  //   )
-  //   getProducts();
+    history.push({
+      pathname: `/edit-product/${id}`,
+      state:{stateProducts}
+      }
+    )
+    getProducts();
     
-  // }
+  }
   const deleteProducts = id => {
     
      axios.delete(PRODUCTS_API_BASE_URL +'/'+id).then(data => {
@@ -147,12 +148,12 @@ export default function ProductsListComponent() {
                         >
                         <DeleteIcon fontSize="inherit" />
                       </IconButton>
-                      {/* <IconButton aria-label="edit"
+                      <IconButton aria-label="edit"
                        className={classes.margin}
                         size="small"
-                        onClick={() => editProducts(emp.id)}>
+                        onClick={() => editProduct(prod.id)}>
                         <EditIcon  fontSize="inherit" />
-                      </IconButton> */}
+                      </IconButton>
                     </TableCell>
               </TableRow>
             );

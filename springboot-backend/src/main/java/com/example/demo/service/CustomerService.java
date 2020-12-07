@@ -7,6 +7,7 @@ import com.example.demo.model.Customer;
 import com.example.demo.report.CustomerReportService;
 import com.example.demo.repository.CustomerRepository;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,7 @@ public class CustomerService {
 
     public boolean deleteCustomerById(Integer id) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
+
         if(customerOptional.isEmpty()) {
             logger.error("The customer was not find");
             throw new ElementNotFound("Customer with " + id + " id doesn't exist!");
@@ -90,8 +92,9 @@ public class CustomerService {
             CompletableFuture<Void> pdfReprot = customerReportService.exportPDFReport();
             CompletableFuture<Void> htmlReport = customerReportService.exportHTMLReport();
             CompletableFuture.allOf(pdfReprot, htmlReport);
+            Thread.sleep(1000);
             logger.info("The reports was created");
-        } catch (FileNotFoundException | JRException e) {
+        } catch (FileNotFoundException | JRException| InterruptedException e) {
             logger.error("The report was not created");
             e.printStackTrace();
             return false;

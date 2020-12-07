@@ -23,10 +23,9 @@ public class CustomerReportService {
     private static final Logger logger = LoggerFactory.getLogger(CustomerReportService.class);
 
     @Async("taskExecutor")
-    public CompletableFuture<Void> exportPDFReport() throws FileNotFoundException, JRException {
+    public CompletableFuture<Void> exportPDFReport() throws FileNotFoundException, JRException, InterruptedException {
         logger.info("The pdf report creation started");
         List<Customer> customers = customerService.getAllCustomers();
-        logger.info(customers.get(0).toString());
         File file  = ResourceUtils.getFile("classpath:customersReport.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(customers);
@@ -39,7 +38,7 @@ public class CustomerReportService {
     }
 
     @Async("taskExecutor")
-    public CompletableFuture<Void> exportHTMLReport() throws FileNotFoundException, JRException {
+    public CompletableFuture<Void> exportHTMLReport() throws FileNotFoundException, JRException, InterruptedException {
         logger.info("The html report creation started");
         List<Customer> customers = customerService.getAllCustomers();
         File file  = ResourceUtils.getFile("classpath:customersReport.jrxml");
@@ -49,6 +48,7 @@ public class CustomerReportService {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
         JasperExportManager.exportReportToHtmlFile(jasperPrint,
                 "/home/dmitry/Documents/CourseWork/react-frontend/src/PdfReports/customers.html");
+
         return null;
     }
 }

@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import com.example.demo.model.Customer;
 import com.example.demo.report.ProductReportService;
+import com.example.demo.service.CustomerService;
 import com.example.demo.service.EmployeeService;
 import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
@@ -17,14 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.demo.Exceptions.ElementNotFound;
 import com.example.demo.Exceptions.ValidationException;
 import com.example.demo.model.OrderProduct;
@@ -49,6 +44,10 @@ public class ProductController {
 			
 			if(product.getPrice()==null) {
 				wrongFields.add("price");
+			}
+
+			if(product.getCount() < 0){
+				wrongFields.add("count");
 			}
 			this.wrongFields = wrongFields;
 		}
@@ -76,7 +75,16 @@ public class ProductController {
     public Iterable<Product> getProducts() {
         return productRepository.findAll();
     }
-
+	@GetMapping("/products/{id}")
+	public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+		Optional<Product> productOptional = productRepository.findById(id);
+		if(productOptional.isEmpty()) {
+			logger.error("The customer was not find");
+			throw new ElementNotFound("Customer with " + id + " id doesn't exist!");
+		}
+		logger.info(productOptional.get().getName());
+		return ResponseEntity.ok(productOptional.get());
+	}
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProduct(@PathVariable Long id) throws ElementNotFound {
     	Optional<Product> optionalProduct = productRepository.findById(id);
@@ -101,13 +109,43 @@ public class ProductController {
     @PostMapping("/products")
     public ResponseEntity<Object> addProduct(@RequestBody Product product) throws ValidationException {
     	FieldValidator fieldValidator = new FieldValidator(product);
-    	
+    	logger.info("103");
     	if(!fieldValidator.getWrongFields().isEmpty()) {
     		throw new ValidationException("Wrong fields", fieldValidator.getWrongFields());
     	}
-    	productRepository.save(product);
+    	try{
+			productRepository.save(product);
+		} catch (Exception e){
+    		e.printStackTrace();
+		}
+
     	return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
     }
+	@PutMapping("/products/{id}")
+	public ResponseEntity<Object> updateCustomer(@PathVariable Long id,@RequestBody Product newProduct){
+
+		Optional<Product> productOptional = productRepository.findById(id);
+		try{
+			if(productOptional.isEmpty()) {
+				throw new ElementNotFound("Customer with " + id + " id doesn't exist!");
+			}
+			FieldValidator fieldValidator = new FieldValidator(newProduct);
+			if(!fieldValidator.getWrongFields().isEmpty()) {
+				throw new ValidationException("Wrong fields", fieldValidator.getWrongFields());
+			}
+		} catch (ElementNotFound e) {
+			logger.error("The customer was not find");
+			e.printStackTrace();
+		}
+		Product product = productOptional.get();
+		product.setCount(newProduct.getCount());
+		product.setPrice(newProduct.getPrice());
+		product.setName(newProduct.getName());
+
+		productRepository.save(product);
+		logger.info("The product was updated");
+		return new ResponseEntity<Object>(new Status("Success"), HttpStatus.ACCEPTED);
+	}
 
 	@GetMapping("/product/report")
 	public ResponseEntity<Object> generateReport() throws FileNotFoundException, JRException {

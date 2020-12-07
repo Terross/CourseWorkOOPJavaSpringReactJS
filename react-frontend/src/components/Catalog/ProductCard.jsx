@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import box from './box.png';
+import React from 'react';
 // const useStyles = makeStyles((theme) => ({
 //     root: {
 //       display: 'flex',
@@ -36,11 +37,22 @@ import box from './box.png';
 	
   }));
 export default function ProductCard(props) {
-    const classes = useStyles();
+	const classes = useStyles();
+	const [count, setCount] = React.useState(props.product.count);
+	const [color, setColor] = React.useState(false);
     const addToCart = (product) => {
-        props.setOrderState([...props.orderState,product]);
+		
+		setCount(count-1);
+		if(!count == 0){
+			props.setOrderState([...props.orderState,product]);
+		}
+		else{
+			setColor(true);
+		}
+        
     }
     const removeToCart = (product) => {
+		setColor(false);
       let index = props.orderState.indexOf(product);
      
       props.orderState.splice(index,1)
@@ -66,7 +78,7 @@ export default function ProductCard(props) {
 			</CardContent>
 		
 			<CardActions style={{marginTop:"-230px"}}>
-				<Button variant="contained" color="primary" style={{width:"45%",
+				<Button disabled = {color} variant="contained" color="primary" style={{width:"45%",
                                                                     margin:"3px",
                                                                     verticalAlign:"bottom"}}
                                                                     onClick={() =>addToCart(props.product)}>

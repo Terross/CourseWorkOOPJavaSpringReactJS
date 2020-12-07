@@ -89,6 +89,11 @@ public class OrderController {
               .getProduct()
               .getId()).get(), dto.getQuantity())));
         }
+        int i =0;
+        for (OrderProduct product:
+             orderProducts) {
+            product.getProduct().setCount(product.getProduct().getCount() - formDtos.get(i).getQuantity());
+        }
         
         
         order.setOrderProducts(orderProducts);

@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 
 @Entity
@@ -16,11 +17,14 @@ public class Product {
     @Column(name = "price")
     private Double price = 0.0;
 
-    public Product(Long id, String name, Double price) {
+    @Column(name = "count")
+    private int count;
+
+    public Product(Long id, String name, Double price, int count) {
         this.id = id;
         this.name = name;
         this.price = price;
-        
+        this.count = count;
     }
 
     public Product() {
@@ -48,5 +52,13 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCount() {
+        return count;
     }
 }

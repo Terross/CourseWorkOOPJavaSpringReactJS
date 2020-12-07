@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.Exceptions.ElementNotFound;
 import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
 import org.junit.Assert;
@@ -37,9 +38,14 @@ class CustomerServiceTest {
         Assert.assertTrue(status);
     }
 
-    @Test
+    @Test()
     public void deleteCustomerById() {
-        boolean status =  customerService.deleteCustomerById(21);
-        Assert.assertTrue(status);
+        try{
+            boolean status =  customerService.deleteCustomerById(2000);
+            Assert.fail("Expected Exception");
+        } catch (Exception e){
+            Assert.assertNotEquals("", e.getMessage());
+        }
+
     }
 }

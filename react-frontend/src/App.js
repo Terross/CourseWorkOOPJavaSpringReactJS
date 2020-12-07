@@ -15,6 +15,7 @@ import ProductsList from './components/Catalog/ProductsList';
 //import customerHTML from './PdfReports/customers.html'
 import OrdersListComponent from './components/OrderComponents/OrdersListComponent';
 import Pi from './components/Pi';
+import EditProduct from './components/ProductComponents/EditProduct';
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
               <Route path="/products" component={ProductsListComponent}/>
 			  <Route path="/orders" component={OrdersListComponent}/>
 			  <Route path="/pi" component={Pi}/>
-			
+				<Route path="/edit-product/:id" component={EditProduct}/>
             </Switch>
           </div>
 

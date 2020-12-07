@@ -1,6 +1,8 @@
 package com.example.demo.report;
 
 
+import com.example.demo.Exceptions.ElementNotFound;
+import com.example.demo.model.Customer;
 import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepository;
 import net.sf.jasperreports.engine.*;
@@ -8,13 +10,18 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
