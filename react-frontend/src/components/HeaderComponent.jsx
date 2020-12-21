@@ -75,6 +75,9 @@ export default function ButtonAppBar(props) {
   const goToEmployee = () => {
     history.push('/employees');
   };
+  const goToShop = () => {
+	  history.push('/shop');
+  }
   const goToCustomers = () => {
     history.push('/customers');
     };
@@ -205,6 +208,7 @@ export default function ButtonAppBar(props) {
         <MenuItem onClick={goToOrders}>Orders</MenuItem>
         <MenuItem onClick={goToEmployee}>Employee</MenuItem>
         <MenuItem onClick={goToCustomers}>Customers</MenuItem>
+		<MenuItem onClick={goToShop}>Shop information</MenuItem>
       </StyledMenu>
     </div>
   );

@@ -87,7 +87,11 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1077aaa6-9ad4-4d12-aaa1-560ffc7c6a11"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14"/>
+                    <font size="14" isBold="false"
+                          fontName="DejaVu Sans"
+                          isStrikeThrough="false"
+                          pdfEncoding="Cp1251"
+                          isPdfEmbedded="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
             </textField>
@@ -96,7 +100,11 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="62e71657-f8f3-4f22-98cf-05e04fd44947"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14"/>
+                    <font size="14" isBold="false"
+                          fontName="DejaVu Sans"
+                          isStrikeThrough="false"
+                          pdfEncoding="Cp1251"
+                          isPdfEmbedded="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{secondName}]]></textFieldExpression>
             </textField>

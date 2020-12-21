@@ -33,17 +33,25 @@ public class ProductReportService {
     @Async("taskExecutor")
     public CompletableFuture<Void> exportPDFReport() throws FileNotFoundException, JRException {
         logger.info("The pdf report creation started");
+        logger.info("1123");
         Iterable<Product> productsIter = productRepository.findAll();
         List<Product> products = new ArrayList<>();
         productsIter.forEach(products::add);
-        File file  = ResourceUtils.getFile("classpath:productsReport.jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(products);
+        logger.info(products.get(0).getName());
+        try
+        {
+            File file  = ResourceUtils.getFile("classpath:productsReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(products);
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-        JasperExportManager.exportReportToPdfFile(jasperPrint,
-                "/home/dmitry/Documents/CourseWork/react-frontend/src/PdfReports/products.pdf");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+            JasperExportManager.exportReportToPdfFile(jasperPrint,
+                    "/home/dmitry/Documents/CourseWork/react-frontend/src/PdfReports/products.pdf");
 
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 

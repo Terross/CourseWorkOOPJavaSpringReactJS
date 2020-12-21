@@ -39,20 +39,29 @@ import React from 'react';
 export default function ProductCard(props) {
 	const classes = useStyles();
 	const [count, setCount] = React.useState(props.product.count);
+	const [startcount, setstartCount] = React.useState(props.product.count);
 	const [color, setColor] = React.useState(false);
+	const [color2, setColor2] = React.useState(true);
     const addToCart = (product) => {
-		
+		let c = count;
+		setColor2(false);
+		console.log(c);
+		props.setOrderState([...props.orderState,product]);
+	
 		setCount(count-1);
-		if(!count == 0){
-			props.setOrderState([...props.orderState,product]);
-		}
-		else{
+		c=c-1;
+		console.log(c);
+		if(c == 0) {
 			setColor(true);
 		}
         
     }
     const removeToCart = (product) => {
 		setColor(false);
+		setCount(count+1);
+		if(count == startcount){
+			setColor2(true);
+		}
       let index = props.orderState.indexOf(product);
      
       props.orderState.splice(index,1)
@@ -84,7 +93,7 @@ export default function ProductCard(props) {
                                                                     onClick={() =>addToCart(props.product)}>
                   Add
                 </Button>
-                <Button variant="contained" color="primary" style={{width:"45%",
+                <Button disabled = {color2} variant="contained" color="primary" style={{width:"45%",
                                                                     margin:"3px",
                                                                     verticalAlign:"bottom"
                                                                     }}
